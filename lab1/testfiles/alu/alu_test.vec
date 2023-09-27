@@ -1,0 +1,29 @@
+fun[3] A[16]	B[16]	C[16]	negative zero carry overflow
+000    0x0003	0x0007	0x000A  0        0    0     0        # add 3, 7 = 10
+000    0xFFF9   0xFFFD  0xFFF6  1        0    1     0        # add -7, -3 = -10
+000    0xFFF9   0x0003  0xFFFC  1        0    0     0        # add -7,  3 = -4
+000    0xFFFD   0x0007  0x0004  0        0    1     0        # add -3,  7 =  4
+000    0xFFFD   0x0003  0x0000  0        1    1     0        # add -3,  3 = 0
+000    0x7FFF   0x0001  0x8000  1        0    0     1        # add (2^15 - 1), 1 = 0 overflow
+000    0x8000   0x8001  0x0001  0        0    1     1        # add -2^15, (-2^15 + 1) = 1 overflow
+001    0x0003	0x0007  0xFFFC  1        0    0     0        # sub 3, 7 = -4
+001    0x0007   0x0003  0x0004  0        0    1     0        # sub 7, 3 = 4
+001    0xFFFD   0xFFF9  0x0004  0        0    1     0        # sub -3, -7 = 4
+001    0xFFF9   0x0003  0xFFF6  1        0    1     0        # sub -7, 3 = -10
+001    0x0007   0x0007  0x0000  0        1    1     0        # sub 7, 7 = 0
+001    0x7FFF   0xFFFF  0x8000  1        0    0     1        # sub (2^15 - 1), -1 = -2^15 overflow
+001    0x8000   0x0001  0x7FFF  0        0    1     1        # sub -2^15, 1 = (2^15 - 1) overflow
+010    0x0001   0x0003  0x0001  0        0    x     x        # and overlap
+010    0x8000   0x7FFF  0x0000  0        1    x     x        # and no overlap
+010    0xFFFF   0xFFFF  0xFFFF  1        0    x     x        # and fully overlap
+011    0x0001   0x0003  0x0003  0        0    x     x        # or overlap
+011    0x8000   0x7FFF  0xFFFF  1        0    x     x        # or no overlap
+011    0x0001   0x0001  0x0001  0        0    x     x        # or fully overlap
+100    0x0001   0x0003  0xFFFC  1        0    x     x        # nor overlap
+100    0x8000   0x7FFF  0x0000  0        1    x     x        # nor no overlap
+100    0x0001   0x0001  0xFFFE  1        0    x     x        # nor fully overlap
+101    0x8008	0x0003  0x0040  0        0    x     x        # lsl 1000 0000 0000 1000, 3 = 0000 0000 0100 0000
+101    0x8008   0x000C  0x8000  1        0    x     x        # lsl 1000 0000 0000 1000, 12 = 1000 0000 0000 0000
+110    0x8008	0x0003  0x1001  0        0    x     x        # lsr 1000 0000 0000 1000, 3 = 0001 0000 0000 0001
+111    0x0008	0x0003  0x0001  0        0    x     x        # asr 0000 0000 0000 1000, 3 = 0000 0000 0000 0001
+111    0x8008	0x0003  0xF001  1        0    x     x        # asr 1000 0000 0000 1000, 3 = 1111 0000 0000 0001
