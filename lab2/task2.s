@@ -1,7 +1,5 @@
 .global _start
-	
 _start:
-	LDR R0, =array
 	LDR R1, =size
 	LDR R2, [R1] //size
 	MOV R3, #-1 //step
@@ -19,13 +17,14 @@ second_loop:
 	SUB R6, R6, #1 //r2-r3-1
 	CMP R5, R6
 	BGE first_loop
-	LDR R7, [R0, R5, LSL #2]
 	ADD R8, R5, #1
+	LDR R0, =array
 	LDR R9, [R0, R8, LSL #2]
+	LDR R7, [R0, R5, LSL #2]
 	CMP R7, R9
 	BLT second_loop
-	STR R9, [R0, R5, LSL #2]
 	STR R7, [R0, R8, LSL #2]
+	STR R9, [R0, R5, LSL #2]
 	B second_loop
 end:
     B end
