@@ -181,24 +181,214 @@ void HEX_write_ASM(int hexId, int val) {
 
 void HEX_clear_ASM(int hexId) {
 	__asm__  __volatile__(
-		// TODO
+		"MOV A1,%0\n\t"
+		"LDR A2, =HEX_MEMORY\n\t"
+		"LDR A3, =HEX4_MEMORY\n\t"
+		"MOV A4, #0\n\t" //used for clearing
+		
+		//checking to see which HEX is selected
+		"CMP A1, #0x01\n\t"
+		"BNE hex1\n\t"
+		"STRB A4, [A2]\n\t"
+		
+		"hex1:\n\t"
+		"CMP A1, #0x02\n\t"
+		"BNE hex2\n\t"
+		"STRB A4, [A2, #1]\n\t"	
+
+		"hex2:\n\t"
+		"CMP A1, #0x04\n\t"
+		"BNE hex3\n\t"
+		"STRB A4, [A2, #2]\n\t"	
+
+		"hex3:\n\t"
+		"CMP A1, #0x08\n\t"
+		"BNE hex4\n\t"
+		"STRB A4, [A2, #3]\n\t"	
+
+		"hex4:\n\t"
+		"CMP A1, #0x10\n\t"
+		"BNE hex5\n\t"
+		"STRB A4, [A3]\n\t"	
+		
+		"hex5:\n\t"
+		"CMP A1, #0x20\n\t"
+		"BNE end\n\t"
+		"STRB A4, [A3, #1]\n\t"	
+		
+		"end\n\t"
+		:
+		:"r"(hexId)
 	);
 }
 
 void HEX_flood_ASM(int hexId) {
 	__asm__  __volatile__(
-		// TODO
-		:
+		"MOV A1,%0\n\t"
+		"LDR A2, =HEX_MEMORY\n\t"
+		"LDR A3, =HEX4_MEMORY\n\t"
+		"MOV A4, #127\n\t" //used for flooding
+		
+		//checking to see which HEX is selected
+		"CMP A1, #0x01\n\t"
+		"BNE hex1\n\t"
+		"STRB A4, [A2]\n\t"
+		
+		"hex1:\n\t"
+		"CMP A1, #0x02\n\t"
+		"BNE hex2\n\t"
+		"STRB A4, [A2, #1]\n\t"	
 
+		"hex2:\n\t"
+		"CMP A1, #0x04\n\t"
+		"BNE hex3\n\t"
+		"STRB A4, [A2, #2]\n\t"	
+
+		"hex3:\n\t"
+		"CMP A1, #0x08\n\t"
+		"BNE hex4\n\t"
+		"STRB A4, [A2, #3]\n\t"	
+
+		"hex4:\n\t"
+		"CMP A1, #0x10\n\t"
+		"BNE hex5\n\t"
+		"STRB A4, [A3]\n\t"	
+		
+		"hex5:\n\t"
+		"CMP A1, #0x20\n\t"
+		"BNE end\n\t"
+		"STRB A4, [A3, #1]\n\t"	
+		
+		"end\n\t"
+		:
+		:"r"(hexId)
+	);
+}
+
+// Pushbuttons
+int PB_data_is_pressed_ASM(int idx) {
+	int val = 0;
+	__asm__  __volatile__(
+		"MOV A1, %1\n\t"
+		"LDR A2, =P_MEMORY\n\t"
+		"LDR A3, [A2]\n\t"
+		"CMP %0, A1\n\t"
+		"BEQ pressed\n\t"
+		
+		"MOV %0, #0\n\t"
+		"B end\n\t"
+		
+		"pressed: \n\t"
+		"MOV %0, #1\n\t"
+		
+		"end: \n\t"
+		:"=r"(val) // output operand %0
+		:"r"(idx)  // input operand %1
+	);
+	return val;
+}
+
+int read_PB_data_ASM() {
+	int val = 0;
+	__asm__  __volatile__(
+		"LDR A1, =P_MEMORY\n\t"
+		"LDR %0, [A1]\n\t"
+		:"=r"(val) // output operand %0
+	);
+	return val;
+}
+
+int PB_edgecp_is_pressed_ASM(int idx) {
+	int val = 0;
+	__asm__  __volatile__(
+		"LDR A1, %1\n\t"
+		"LDR A2, =PEDGE_MEMORY\n\t"
+		"LDR A3, [A2]\n\t"
+		"CMP A3, A1\n\t"
+		"BEQ pressed\n\t"
+		
+		//not pressed
+		"MOV %0, #0\n\t"
+		"B end\n\t"
+		
+		//pressed
+		"pressed:\n\t"
+		"MOV %0, #1\n\t"
+		
+		"end: \n\t"
+		:"=r"(val) // output operand %0
+		:"r"(idx)  // input operand %1
+	);
+	return val;
+}
+
+int read_PB_edgecp_ASM() {
+	int val = 0;
+	__asm__ __volatile__(
+		"LDR A1, =PEDGE_MEMORY\n\t"
+		"LDR %0, [A1]\n\t"
+		:"=r"(val) // output operand %0
+	);
+	return val;
+}
+
+void PB_clear_edgecp_ASM() {
+	__asm__  __volatile__(
+		"MOV A1, #0xFF\n\t"
+		"LDR A2, =PEDGE_MEMORY\n\t"
+		"STRB A1, [A2]
+	);
+}
+
+
+void enable_PB_INT_ASM(int idx) {
+	__asm__  __volatile__(
+		"MOV A1, =PMASK_MEMORY\n\t"
+		"LDRB A2, [A1]\n\t"
+		"ORR %0, A2, %0\n\t"
+		"STRB %0, [A1]\n\t"
+		: 
+		:"r"(idx) // input operand %0
+	);
+}
+
+void disable_PB_INT_ASM(int idx) {
+	__asm__  __volatile__(
+		"MVN A1, %0\n\t"
+		"LDR A2, =PMASK_MEMORY\n\t"
+		"LDRB A3, [A2]\n\t"
+		"AND A4, A3, A1\n\t"
+		"STRB A4, [A2]\n\t"
+		: 
+		:"r"(idx) // input operand %0
 	);
 }
 
 
 int main() {
 	init();
+	HEX_clear_ASM(63);
+    HEX_flood_ASM(48);
+    PB_clear_edgecp_ASM();
+    disable_PB_INT_ASM(15);
+	
 	while(1) { // infinite loop
 		int switchState = read_slider_switches_ASM(); // read slider switch state
 		write_LEDs_ASM(switchState); // write state to the LEDs
+		
+		int sw9 = 512; //2^9
+		int allSwitches = 15; //2^0 + 2^1 + 2^2 + 2^3
+		int pbRelease = read_PB_edgecp_ASM() & allSwitches;
+		
+		//checking if switch 9 is pressed
+		if(sw9 & switchState) {
+			HEX_clear_ASM(15);
+		}
+		else if(pbRelease !=0){
+			int val = switchState & allSwitches;
+            HEX_write_ASM(pbRelease, val);
+            PB_clear_edgecp_ASM();
+		}
 	}
 	return 0;
 }
