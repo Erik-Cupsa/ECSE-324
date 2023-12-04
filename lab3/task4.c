@@ -225,9 +225,58 @@ void draw_ampersand_ASM(int x, int y) {
     VGA_write_char_ASM(adjustedX, adjustedY, '&');
 }
 
+void draw_exit_ASM(int x, int y) {
+    double adjStartX = x * 80 / 12; // adjusting x to fit dimensions
+    double adjStartY = y * 60 / 9; // adjusting y to fit dimensions
+	adjStartY += 2;
+    
+	const char* word = "EXIT"; // Define the word "EXIT"
+	for (int i = 0; i < 4; ++i) {
+		char letter = word[i];
+		VGA_write_char_ASM(adjStartX + i, adjStartY, letter);
+	}
+}
+
+void draw_obstacles_ASM(int x, int y) {
+	int obstacleColour = 0xF800;
+	int obstacleSize = 26; //note: same width/height
+	int startY = y*obstacleSize;
+	int startX = x*obstacleSize;
+	
+	for (int i = startY; i < startY + obstacleSize; ++i){
+		for (int j = startX; j < startX + obstacleSize; ++j){
+			VGA_draw_point_ASM(j, i, obstacleColour);
+		}
+	}
+}
+
+void fill_grid_ASM(int numCourse){
+	//int maze = mazes[numCourse];
+	for (int y = 0; y < 9; ++y) {
+		for (int x = 0; x < 12; ++x) {
+			int element = mazes[numCourse][y][x];
+			if(element == 0){
+				continue;
+			}
+			else if(element == 1){
+				draw_obstacles_ASM(x, y);
+			}
+			else if(element == 2){
+				draw_ampersand_ASM(x, y);
+			}
+			else if(element == 3){
+				draw_exit_ASM(x, y);
+			}
+		}
+	}
+}
+
 int main() {
 	VGA_fill_ASM();
 	draw_grid_ASM();
-	draw_ampersand_ASM(1,4);
+	//draw_ampersand_ASM(6,2);
+	//draw_exit_ASM(10,8);
+	//draw_obstacles_ASM(0,5);
+	fill_grid_ASM(2);
 	return 0;
 }
