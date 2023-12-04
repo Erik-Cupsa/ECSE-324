@@ -35,145 +35,148 @@ void write_LEDs_ASM(int val) {
 
 void HEX_write_ASM(int hexId, int val) {
 	__asm__  __volatile__(
-		"MOV R1, %0\n\t"
-		"MOV R2, %1\n\t"
+		"MOV A1, %0\n\t"
+		"MOV A2, %1\n\t"
 		
 		//defining patterns for values 0-F
 		
-		"CMP R2, #0\n\t"
+		"CMP A2, #0\n\t"
 		"BEQ pattern_0\n\t"
 		
-		"CMP R2, #1\n\t"
+		"CMP A2, #1\n\t"
 		"BEQ pattern_1\n\t"
 		
-		"CMP R2, #2\n\t"
+		"CMP A2, #2\n\t"
 		"BEQ pattern_2\n\t"
 		
-		"CMP R2, #3\n\t"
+		"CMP A2, #3\n\t"
 		"BEQ pattern_3\n\t"
 
-		"CMP R2, #4\n\t"
+		"CMP A2, #4\n\t"
 		"BEQ pattern_4\n\t"
 		
-		"CMP R2, #5\n\t"
+		"CMP A2, #5\n\t"
 		"BEQ pattern_5\n\t"
 		
-		"CMP R2, #6\n\t"
+		"CMP A2, #6\n\t"
 		"BEQ pattern_6\n\t"
 		
-		"CMP R2, #7\n\t"
+		"CMP A2, #7\n\t"
 		"BEQ pattern_7\n\t"
 
-		"CMP R2, #8\n\t"
+		"CMP A2, #8\n\t"
 		"BEQ pattern_8\n\t"
 		
-		"CMP R2, #9\n\t"
+		"CMP A2, #9\n\t"
 		"BEQ pattern_9\n\t"
 		
-		"CMP R2, #10\n\t"
+		"CMP A2, #10\n\t"
 		"BEQ pattern_A\n\t"
 		
-		"CMP R2, #11\n\t"
+		"CMP A2, #11\n\t"
 		"BEQ pattern_B\n\t"
 
-		"CMP R2, #12\n\t"
+		"CMP A2, #12\n\t"
 		"BEQ pattern_C\n\t"
 		
-		"CMP R2, #13\n\t"
+		"CMP A2, #13\n\t"
 		"BEQ pattern_D\n\t"
 		
-		"CMP R2, #14\n\t"
+		"CMP A2, #14\n\t"
 		"BEQ pattern_E\n\t"
 		
-		"CMP R2, #15\n\t"
+		"CMP A2, #15\n\t"
 		"BEQ pattern_F\n\t"
 		
 		//branches for respective patterns
 		
 		"pattern_0:\n\t"
-        "MOV R0, #0x3F\n\t"
+        "MOV R3, #0x3F\n\t"
         "B end_patterns\n\t"
 		
 		"pattern_1:\n\t"
-        "MOV R0, #0x06\n\t"
+        "MOV R3, #0x06\n\t"
         "B end_patterns\n\t"
 
 		"pattern_2:\n\t"
-        "MOV R0, #0x5B\n\t"
+        "MOV R3, #0x5B\n\t"
         "B end_patterns\n\t"
 		
 		"pattern_3:\n\t"
-        "MOV R0, #0x4F\n\t"
+        "MOV R3, #0x4F\n\t"
         "B end_patterns\n\t"
 		
 		"pattern_4:\n\t"
-        "MOV R0, #0x66\n\t"
+        "MOV R3, #0x66\n\t"
         "B end_patterns\n\t"
 		
 		"pattern_5:\n\t"
-        "MOV R0, #0x6D\n\t"
+        "MOV R3, #0x6D\n\t"
         "B end_patterns\n\t"
 
 		"pattern_6:\n\t"
-        "MOV R0, #0x7D\n\t"
+        "MOV R3, #0x7D\n\t"
         "B end_patterns\n\t"
 		
 		"pattern_7:\n\t"
-        "MOV R0, #0x07\n\t"
+        "MOV R3, #0x07\n\t"
         "B end_patterns\n\t"
 
 		"pattern_8:\n\t"
-        "MOV R0, #0x7F\n\t"
+        "MOV R3, #0x7F\n\t"
         "B end_patterns\n\t"
 		
 		"pattern_9:\n\t"
-        "MOV R0, #0x6F\n\t"
+        "MOV R3, #0x6F\n\t"
         "B end_patterns\n\t"
 
 		"pattern_A:\n\t"
-        "MOV R0, #0x77\n\t"
+        "MOV R3, #0x77\n\t"
         "B end_patterns\n\t"
 		
 		"pattern_B:\n\t"
-        "MOV R0, #0x7C\n\t"
+        "MOV R3, #0x7C\n\t"
         "B end_patterns\n\t"
 		
 		"pattern_C:\n\t"
-        "MOV R0, #0x39\n\t"
+        "MOV R3, #0x39\n\t"
         "B end_patterns\n\t"
 		
 		"pattern_D:\n\t"
-        "MOV R0, #0x5E\n\t"
+        "MOV R3, #0x5E\n\t"
         "B end_patterns\n\t"
 
 		"pattern_E:\n\t"
-        "MOV R0, #0x79\n\t"
+        "MOV R3, #0x79\n\t"
         "B end_patterns\n\t"
 		
 		"pattern_F:\n\t"
-        "MOV R0, #0x71\n\t"
+        "MOV R3, #0x71\n\t"
         "B end_patterns\n\t"
 		
 		// End of pattern definitions
         "end_patterns:\n\t"
-		"LDR R3, =HEX_MEMORY\n\t"
+		"LDR R4, =HEX_MEMORY\n\t"
 		
 		//looping through
-		"MOV R4, #0\n\t"
+		"PUSH {R6, LR}\n\t"
+		"MOV R5, #0\n\t"
 		"loop: \n\t"
-		"CMP R4, #6\n\t"
+		"CMP R5, #4\n\t"
 		"BEQ end_loop\n\t"
-		"MOV R5, #1\n\t"
-		"LSL R5, R4\n\t"
-		"TST R1, R5\n\t"
+		
+		"MOV R6, #1\n\t"
+		"LSL R6, R6, R5\n\t"
+		"TST A1, R6\n\t"
 		"BEQ next\n\t"
-		"STRB R0, [R3, R4]\n\t"
+		"STRB R3, [R4, R5]\n\t"
 		
 		"next: \n\t"
-		"ADD R4, R4, #1\n\t"
+		"ADD R5, R5, #1\n\t"
 		"B loop\n\t"
 		
 		"end_loop: \n\t"
+		"POP {R6, LR}\n\t"
 		:
     	:"r"(hexId), "r"(val) // input operands %0 and %1
 	);
@@ -181,42 +184,42 @@ void HEX_write_ASM(int hexId, int val) {
 
 void HEX_clear_ASM(int hexId) {
 	__asm__  __volatile__(
-		"MOV R1,%0\n\t"
-		"LDR R0, =HEX_MEMORY\n\t"
-		"LDR R2, =HEX4_MEMORY\n\t"
+		"MOV A1, %0\n\t"
+		"LDR R2, =HEX_MEMORY\n\t"
+		"LDR R4, =HEX4_MEMORY\n\t"
 		"MOV R3, #0\n\t" //used for clearing
 		
+		//looping through
+		"PUSH {R6, LR}\n\t"
+		"MOV R5, #0\n\t" //used for loop
+		"loop_clear: \n\t"
+		"CMP R5, #4\n\t"
+		"BEQ end_clear\n\t"
+		
+		"MOV R6, #1\n\t"
+		"LSL R6, R6, R5\n\t"
+		"TST A1, R6\n\t"
+		"BEQ next_clear\n\t"
+		"STRB R3, [R2, R5]\n\t"
+		
+		"next_clear: \n\t"
+		"ADD R5, R5, #1\n\t"
+		"B loop_clear\n\t"
+		
+		"end_clear: \n\t"
+		"POP {R6, LR}\n\t"
 		//checking to see which HEX is selected
-		"CMP R1, #0x01\n\t"
-		"BNE hex_1\n\t"
-		"STRB R3, [R0]\n\t"
-		
-		"hex_1:\n\t"
-		"CMP R1, #0x02\n\t"
-		"BNE hex_2\n\t"
-		"STRB R3, [R0, #1]\n\t"	
 
-		"hex_2:\n\t"
-		"CMP R1, #0x04\n\t"
-		"BNE hex_3\n\t"
-		"STRB R3, [R0, #2]\n\t"	
-
-		"hex_3:\n\t"
-		"CMP R1, #0x08\n\t"
-		"BNE hex_4\n\t"
-		"STRB R3, [R0, #3]\n\t"	
-
-		"hex_4:\n\t"
-		"CMP R1, #0x10\n\t"
-		"BNE hex_5\n\t"
-		"STRB R3, [R2]\n\t"	
+		"TST A1, #0x10\n\t"
+		"BEQ skip_five\n\t"
+		"STRB R3, [R4]\n\t"	
 		
-		"hex_5:\n\t"
-		"CMP R1, #0x20\n\t"
-		"BNE end_hex\n\t"
-		"STRB R3, [R2, #1]\n\t"	
+		"skip_five:\n\t"
+		"TST A1, #0x20\n\t"
+		"BEQ end_hexclear\n\t"
+		"STRB R3, [R4, #1]\n\t"	
 		
-		"end_hex:\n\t"
+		"end_hexclear:\n\t"
 		:
 		:"r"(hexId)
 	);
@@ -224,40 +227,40 @@ void HEX_clear_ASM(int hexId) {
 
 void HEX_flood_ASM(int hexId) {
 	__asm__  __volatile__(
-		"MOV R1,%0\n\t"
-		"LDR R0, =HEX_MEMORY\n\t"
-		"LDR R2, =HEX4_MEMORY\n\t"
-		"MOV R3, #127\n\t" //used for flooding
+		"MOV A1, %0\n\t"
+		"LDR R5, =HEX_MEMORY\n\t"
+		"LDR R6, =HEX4_MEMORY\n\t"
+		"MOV R7, #127\n\t" //used for clearing
 		
 		//checking to see which HEX is selected
-		"CMP R1, #0x01\n\t"
-		"BNE hex_one\n\t"
-		"STRB R3, [R0]\n\t"
+		"TST A1, #0x01\n\t"
+		"BEQ hex_one\n\t"
+		"STRB R7, [R5]\n\t"
 		
 		"hex_one:\n\t"
-		"CMP R1, #0x02\n\t"
-		"BNE hex_two\n\t"
-		"STRB R3, [R0, #1]\n\t"	
+		"TST A1, #0x02\n\t"
+		"BEQ hex_two\n\t"
+		"STRB R7, [R5, #1]\n\t"	
 
 		"hex_two:\n\t"
-		"CMP R1, #0x04\n\t"
-		"BNE hex_three\n\t"
-		"STRB R3, [R0, #2]\n\t"	
+		"TST A1, #0x04\n\t"
+		"BEQ hex_three\n\t"
+		"STRB R7, [R5, #2]\n\t"	
 
 		"hex_three:\n\t"
-		"CMP R1, #0x08\n\t"
-		"BNE hex_four\n\t"
-		"STRB R3, [R0, #3]\n\t"	
+		"TST A1, #0x08\n\t"
+		"BEQ hex_four\n\t"
+		"STRB R7, [R5, #3]\n\t"	
 
 		"hex_four:\n\t"
-		"CMP R1, #0x10\n\t"
-		"BNE hex_five\n\t"
-		"STRB R3, [R2]\n\t"	
+		"TST A1, #0x10\n\t"
+		"BEQ hex_five\n\t"
+		"STRB R7, [R6]\n\t"	
 		
 		"hex_five:\n\t"
-		"CMP R1, #0x20\n\t"
-		"BNE end_check\n\t"
-		"STRB R3, [R2, #1]\n\t"	
+		"TST A1, #0x20\n\t"
+		"BEQ end_check\n\t"
+		"STRB R7, [R6, #1]\n\t"	
 		
 		"end_check:\n\t"
 		:
@@ -272,7 +275,7 @@ int PB_data_is_pressed_ASM(int idx) {
 		"MOV R1, %1\n\t"
 		"LDR R0, =P_MEMORY\n\t"
 		"LDR R2, [R0]\n\t"
-		"CMP %0, R1\n\t"
+		"TST %0, R1\n\t"
 		"BEQ data_pressed\n\t"
 		
 		"MOV %0, #0\n\t"
@@ -304,7 +307,7 @@ int PB_edgecp_is_pressed_ASM(int idx) {
 		"MOV R1, %1\n\t"
 		"LDR R0, =PEDGE_MEMORY\n\t"
 		"LDR R2, [R0]\n\t"
-		"CMP R2, R1\n\t"
+		"TST R2, R1\n\t"
 		"BEQ edge_pressed\n\t"
 		
 		//not pressed
@@ -372,23 +375,31 @@ int main() {
     PB_clear_edgecp_ASM();
     disable_PB_INT_ASM(15);
 	
+	int previous = 0;
 	while(1) { // infinite loop
 		int switchState = read_slider_switches_ASM(); // read slider switch state
 		write_LEDs_ASM(switchState); // write state to the LEDs
 		
 		int sw9 = 512; //2^9
-		int allSwitches = 15; //2^0 + 2^1 + 2^2 + 2^3
-		int pbRelease = read_PB_edgecp_ASM() & allSwitches;
+		int sw9pressed = sw9 & switchState;
 		
 		//checking if switch 9 is pressed
-		if(sw9 & switchState) {
-			HEX_clear_ASM(15);
+		if(sw9pressed && !previous) {
+			HEX_clear_ASM(63);
 		}
-		else if(pbRelease !=0){
-			int val = switchState & allSwitches;
-            HEX_write_ASM(pbRelease, val);
-            PB_clear_edgecp_ASM();
+		else if(!sw9pressed && previous) {
+			HEX_flood_ASM(48);
 		}
+		else if(!sw9pressed){
+			int allSwitches = 15; //2^0 + 2^1 + 2^2 + 2^3
+			int pbRelease = read_PB_edgecp_ASM() & allSwitches;
+			if(pbRelease!= 0){
+				int val = switchState & allSwitches;
+            	HEX_write_ASM(pbRelease, val);
+            	PB_clear_edgecp_ASM();
+			}
+		}
+		previous = sw9pressed;
 	}
 	return 0;
 }
